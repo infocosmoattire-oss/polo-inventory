@@ -386,39 +386,55 @@ function renderHist(){
 function populateOrderDDs(){
   const cats=Object.keys(S.categories||{});
   const sel=document.getElementById('o-cat');
+  const curCat=sel.value;
   sel.innerHTML=cats.map(c=>`<option>${c}</option>`).join('');
-  syncOrderColours();
+  if(cats.includes(curCat)) sel.value=curCat;
+  syncOrderColours(true);
 }
-function syncOrderColours(){
+function syncOrderColours(preserveCol){
   const cat=document.getElementById('o-cat').value;
   const colours=Object.keys(S.categories[cat]||{});
-  document.getElementById('o-col').innerHTML=colours.map(c=>`<option>${c}</option>`).join('');
-  syncOrderDesigns();
+  const colSel=document.getElementById('o-col');
+  const curCol=colSel.value;
+  colSel.innerHTML=colours.map(c=>`<option>${c}</option>`).join('');
+  if(preserveCol && colours.includes(curCol)) colSel.value=curCol;
+  syncOrderDesigns(preserveCol);
 }
-function syncOrderDesigns(){
+function syncOrderDesigns(preserveDes){
   const cat=document.getElementById('o-cat').value;
   const col=document.getElementById('o-col').value;
   const designs=S.categories[cat]?.[col]?.designs||[];
-  document.getElementById('o-des').innerHTML=designs.map(d=>`<option>${d}</option>`).join('');
+  const desSel=document.getElementById('o-des');
+  const curDes=desSel.value;
+  desSel.innerHTML=designs.map(d=>`<option>${d}</option>`).join('');
+  if(preserveDes && designs.includes(curDes)) desSel.value=curDes;
 }
 
 function populateReturnDDs(){
   const cats=Object.keys(S.categories||{});
   const sel=document.getElementById('r-cat');
+  const curCat=sel.value;
   sel.innerHTML=cats.map(c=>`<option>${c}</option>`).join('');
-  syncReturnColours();
+  if(cats.includes(curCat)) sel.value=curCat;
+  syncReturnColours(true);
 }
-function syncReturnColours(){
+function syncReturnColours(preserveCol){
   const cat=document.getElementById('r-cat').value;
   const colours=Object.keys(S.categories[cat]||{});
-  document.getElementById('r-col').innerHTML=colours.map(c=>`<option>${c}</option>`).join('');
-  syncReturnDesigns();
+  const colSel=document.getElementById('r-col');
+  const curCol=colSel.value;
+  colSel.innerHTML=colours.map(c=>`<option>${c}</option>`).join('');
+  if(preserveCol && colours.includes(curCol)) colSel.value=curCol;
+  syncReturnDesigns(preserveCol);
 }
-function syncReturnDesigns(){
+function syncReturnDesigns(preserveDes){
   const cat=document.getElementById('r-cat').value;
   const col=document.getElementById('r-col').value;
   const designs=S.categories[cat]?.[col]?.designs||[];
-  document.getElementById('r-des').innerHTML=designs.map(d=>`<option>${d}</option>`).join('');
+  const desSel=document.getElementById('r-des');
+  const curDes=desSel.value;
+  desSel.innerHTML=designs.map(d=>`<option>${d}</option>`).join('');
+  if(preserveDes && designs.includes(curDes)) desSel.value=curDes;
 }
 
 function populateEditForm(){
