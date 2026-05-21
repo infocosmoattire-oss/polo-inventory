@@ -1,0 +1,605 @@
+{
+  "categories": {
+    "Activewear": {
+      "Black": {
+        "hex": "#212121",
+        "designs": [
+          "Active Pro",
+          "Armour",
+          "Armour Female",
+          "Iron Paradise",
+          "Iron Paradise Female",
+          "PowerPulseTracksuit",
+          "Sprint",
+          "Sprint Female",
+          "Stride",
+          "Stride Female"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Grey": {
+        "hex": "#757575",
+        "designs": [
+          "Armour",
+          "Iron Paradise",
+          "Sprint",
+          "Stride"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Maroon": {
+        "hex": "#800000",
+        "designs": [
+          "Active Pro",
+          "Active Pro Female",
+          "Armour",
+          "Armour Female",
+          "Iron Paradise",
+          "Sprint",
+          "Sprint Female",
+          "Stride",
+          "Stride Female"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Navy": {
+        "hex": "#1a237e",
+        "designs": [
+          "Active Pro",
+          "Active Pro Female",
+          "Armour Female",
+          "Iron Paradise",
+          "Iron Paradise Female",
+          "Sprint",
+          "Sprint Female",
+          "Stride",
+          "Stride Female"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Olive Green": {
+        "hex": "#827717",
+        "designs": [
+          "Active Pro Female",
+          "Armour",
+          "Armour Female",
+          "Champions Trophy Olive Green",
+          "Iron Paradise",
+          "Iron Paradise Female",
+          "Sprint",
+          "Sprint Female",
+          "Stride"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "White": {
+        "hex": "#f5f5f5",
+        "designs": [
+          "Armour",
+          "Iron Paradise",
+          "Sprint",
+          "Stride"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Yellow": {
+        "hex": "#f9a825",
+        "designs": [
+          "Active Pro Female",
+          "Armour Female",
+          "Iron Paradise Female",
+          "Sprint",
+          "Sprint Female"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      }
+    },
+    "Crew Necks": {
+      "Black": {
+        "hex": "#212121",
+        "designs": [
+          "AD24 Black Edition",
+          "Code Dignity Black",
+          "Code Yakuza",
+          "PitStop Black - Red Label",
+          "Pitstop Black - White Label",
+          "Plain Cotton T-Shirt",
+          "Raw Primal",
+          "The 90's Black",
+          "The Original Black"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "White": {
+        "hex": "#f5f5f5",
+        "designs": [
+          "Code Yakuza",
+          "PitStop White - Red Label",
+          "Pitstop White Black Label",
+          "Raw Primal",
+          "Texas Dust White"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      }
+    },
+    "Drop Shoulders": {
+      "Beige": {
+        "hex": "#d7ccc8",
+        "designs": [
+          "Attire Beige"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Black": {
+        "hex": "#212121",
+        "designs": [
+          "Air Drop 23",
+          "Attire Black",
+          "Chakra Cut"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Maroon": {
+        "hex": "#800000",
+        "designs": [
+          "Attire Maroon"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Olive Green": {
+        "hex": "#827717",
+        "designs": [
+          "Attire Olive Green"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Sky Blue": {
+        "hex": "#0288d1",
+        "designs": [
+          "Attire Sky Blue"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "White": {
+        "hex": "#f5f5f5",
+        "designs": [
+          "Attire White"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      }
+    },
+    "Hoodies": {
+      "Black": {
+        "hex": "#212121",
+        "designs": [
+          "Amg Momentum Gear",
+          "Attire Black",
+          "BMW Mark",
+          "Dogg Edition Black",
+          "Eclipse hoodies pack",
+          "Grove Drop Black",
+          "Iconic Scuderia",
+          "Jordan 23 Black",
+          "Marley Version Black",
+          "Midnight Monster",
+          "Original",
+          "Pitstop Black",
+          "Pitstop Edition Pack",
+          "Porsche 911",
+          "Porsche Mark",
+          "Prestige Trios pack",
+          "Prime Trios Pack",
+          "Pure Amg",
+          "Rosso Nero Black",
+          "Tokyo Spirit Premium"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Dark Green": {
+        "hex": "#1b5e20",
+        "designs": [
+          "Attire Dark Green"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Green": {
+        "hex": "#2e7d32",
+        "designs": [
+          "Original"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Maroon": {
+        "hex": "#800000",
+        "designs": [
+          "Attire Maroon",
+          "Audi Mark Maroon",
+          "Ferrari Mark Maroon",
+          "Honda Mark Maroon"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Navy": {
+        "hex": "#1a237e",
+        "designs": [
+          "Attire Navy Blue",
+          "Classic Duos Pack",
+          "Nature Blends Pack",
+          "Original Navy Blue"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Olive Green": {
+        "hex": "#827717",
+        "designs": [
+          "Original"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Royal Blue": {
+        "hex": "#1565c0",
+        "designs": [
+          "Attire Royal Blue",
+          "Original",
+          "Original - Royal Blue"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Teal Green": {
+        "hex": "#00695c",
+        "designs": [
+          "Original",
+          "Original - Teal Green Limited Edition"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "White": {
+        "hex": "#f5f5f5",
+        "designs": [
+          "Attire White"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      }
+    },
+    "Polos": {
+      "Black": {
+        "hex": "#212121",
+        "designs": [
+          "AMG Momentum Gear",
+          "Amg Mark",
+          "Attire Black",
+          "Attire CEO.000.000 POLO",
+          "Bmw Stripe Classic",
+          "Cosmograph Black",
+          "F1 Noir",
+          "GrandPrix Black",
+          "Honda Mark Black",
+          "Iconic Scuderia",
+          "Maserati legacy",
+          "Merc mark Black",
+          "Miura bull",
+          "Porsche 911 Turbo",
+          "Porsche Fireline",
+          "Porsche Fireline V2",
+          "Quadro",
+          "RB Racing Core",
+          "Rosso Nero Edition",
+          "Speed Mark"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Maroon": {
+        "hex": "#800000",
+        "designs": [
+          "Ferrari Mark Maroon",
+          "Original",
+          "Porsche Mark Maroon"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Navy": {
+        "hex": "#1a237e",
+        "designs": [
+          "Attire Navy Blue",
+          "Iconic Scuderia",
+          "Maserati legacy",
+          "Original",
+          "Porsche 911 Turbo",
+          "Porsche Fireline",
+          "Porsche Fireline V2",
+          "Quadro",
+          "RB Racing Core",
+          "RallyX",
+          "Speed Mark",
+          "Vette"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Orange": {
+        "hex": "#e65100",
+        "designs": [
+          "Toro"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Red": {
+        "hex": "#c62828",
+        "designs": [
+          "Attire Red",
+          "Iconic Scuderia",
+          "Maserati legacy",
+          "Vette"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Royal Blue": {
+        "hex": "#1565c0",
+        "designs": [
+          "Maserati legacy"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Sea Green": {
+        "hex": "#2e7d32",
+        "designs": [
+          "Original"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "Teal Green": {
+        "hex": "#00695c",
+        "designs": [
+          "Original"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "White": {
+        "hex": "#f5f5f5",
+        "designs": [
+          "Amg Mark",
+          "Attire White",
+          "Miura bull",
+          "Original",
+          "Porsche Fireline",
+          "Quattro White",
+          "RallyX"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      }
+    },
+    "Sweatshirts": {
+      "Black": {
+        "hex": "#212121",
+        "designs": [
+          "Amg Black",
+          "Attire Black",
+          "Game Token",
+          "Goku\u2019s Fury",
+          "Player's Choice",
+          "Porsche Fireline"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      },
+      "White": {
+        "hex": "#f5f5f5",
+        "designs": [
+          "Player's Choice",
+          "The King's Call"
+        ],
+        "stock": {
+          "S": 0,
+          "M": 0,
+          "L": 0,
+          "XL": 0,
+          "XXL": 0
+        }
+      }
+    }
+  },
+  "printed": {},
+  "orders": []
+}
