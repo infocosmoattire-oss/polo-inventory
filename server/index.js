@@ -87,22 +87,62 @@ function verifyShopifyWebhook(req) {
 }
 
 // ── Shopify line item parser ──────────────────────────────────
-// Variant title: "Category / Colour / Design / Size" OR "Colour / Design / Size"
-// Fallback: try to match colour from known colours
+// Handles Shopify variant formats: "Large / Navy", "Navy / Large", etc.
 function parseLineItems(lineItems, data) {
-  const allColours = new Set();
-  Object.values(data.categories).forEach(cat => Object.keys(cat).forEach(c => allColours.add(c.toLowerCase())));
+  const sizeMap = {
+    'small':'S','medium':'M','large':'L','extra large':'XL',
+    'extra large (xl)':'XL','xl':'XL','2xl':'XXL','xxl':'XXL',
+    's':'S','m':'M','l':'L'
+  };
 
   return lineItems.map(item => {
-    const parts = (item.variant_title || '').split(' / ');
-    let category = 'Polos', colour = parts[0] || '', design = parts[1] || 'Unknown', size = parts[2] || 'M';
-    if (parts.length >= 4) { category = parts[0]; colour = parts[1]; design = parts[2]; size = parts[3]; }
+    const title = item.title || '';
+    const variant = item.variant_title || '';
+    const parts = variant.split(' / ').map(p => p.trim());
 
-    // Normalise size
-    const sizeMap = { 'small':'S','medium':'M','large':'L','extra large (xl)':'XL','xl':'XL','2xl':'XXL','xxl':'XXL' };
-    size = sizeMap[size.toLowerCase()] || size.toUpperCase();
+    let colour = null, size = 'M';
 
-    return { category, colour, design, size, qty: item.quantity, sku: item.sku, rawTitle: item.title };
+    for (const part of parts) {
+      const lp = part.toLowerCase();
+      if (sizeMap[lp]) {
+        size = sizeMap[lp];
+      } else {
+        // Match against known colour names in inventory
+        let found = null;
+        Object.values(data.categories).forEach(cat => {
+          Object.keys(cat).forEach(cn => {
+            if (cn.toLowerCase() === lp) found = cn;
+          });
+        });
+        if (found) colour = found;
+        else if (!colour) colour = part;
+      }
+    }
+    if (!colour) colour = parts[0] || 'Unknown';
+
+    // Extract design from product title
+    const design = title
+      .replace(/^Cosmo /i, '')
+      .replace(/ Polo Shirt$/i, '')
+      .replace(/ Polo$/i, '')
+      .replace(/ Hoodie$/i, '')
+      .replace(/ Crew Neck$/i, '')
+      .replace(/ Drop Shoulder$/i, '')
+      .replace(/ Sweat ?[Ss]hirt$/i, '')
+      .replace(/ Drifit$/i, '')
+      .replace(/ \|.*$/i, '')
+      .trim() || 'Unknown';
+
+    // Detect category from product title
+    const tl = title.toLowerCase();
+    let category = 'Polos';
+    if (tl.includes('hoodie')) category = 'Hoodies';
+    else if (tl.includes('crew neck')) category = 'Crew Necks';
+    else if (tl.includes('drop shoulder')) category = 'Drop Shoulders';
+    else if (tl.includes('drifit') || tl.includes('tracksuit') || tl.includes('activewear')) category = 'Activewear';
+    else if (tl.includes('sweat')) category = 'Sweatshirts';
+
+    return { category, colour, design, size, qty: item.quantity, sku: item.sku, rawTitle: title };
   });
 }
 
