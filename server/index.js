@@ -1,30 +1,56 @@
 const express = require('express');
 const crypto = require('crypto');
-const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const SHOPIFY_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET || 'your_webhook_secret_here';
-const DATA_FILE = path.join(__dirname, 'inventory.json');
 
+// ── Database ──────────────────────────────────────────────────
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
+});
+
+async function initDB() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS inventory (
+      key TEXT PRIMARY KEY,
+      value JSONB NOT NULL
+    );
+  `);
+  // Seed initial data if empty
+  const res = await pool.query(`SELECT key FROM inventory WHERE key = 'data'`);
+  if (res.rows.length === 0) {
+    await pool.query(
+      `INSERT INTO inventory (key, value) VALUES ('data', $1)`,
+      [JSON.stringify(getInitialData())]
+    );
+    console.log('Database seeded with initial data');
+  }
+}
+
+async function loadData() {
+  const res = await pool.query(`SELECT value FROM inventory WHERE key = 'data'`);
+  return res.rows[0].value;
+}
+
+async function saveData(data) {
+  await pool.query(
+    `UPDATE inventory SET value = $1 WHERE key = 'data'`,
+    [JSON.stringify(data)]
+  );
+}
+
+// ── Middleware ────────────────────────────────────────────────
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/webhooks', express.raw({ type: 'application/json' }));
 app.use(express.json());
 
-// ── Data ──────────────────────────────────────────────────────
-function loadData() {
-  if (!fs.existsSync(DATA_FILE)) {
-    const initial = getInitialData();
-    fs.writeFileSync(DATA_FILE, JSON.stringify(initial, null, 2));
-    return initial;
-  }
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-}
-function saveData(data) { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); }
-
+// ── Initial data ──────────────────────────────────────────────
 function getInitialData() {
   return {
     categories: {
@@ -87,7 +113,6 @@ function verifyShopifyWebhook(req) {
 }
 
 // ── Shopify line item parser ──────────────────────────────────
-// Handles Shopify variant formats: "Large / Navy", "Navy / Large", etc.
 function parseLineItems(lineItems, data) {
   const sizeMap = {
     'small':'S','medium':'M','large':'L','extra large':'XL',
@@ -107,7 +132,6 @@ function parseLineItems(lineItems, data) {
       if (sizeMap[lp]) {
         size = sizeMap[lp];
       } else {
-        // Match against known colour names in inventory
         let found = null;
         Object.values(data.categories).forEach(cat => {
           Object.keys(cat).forEach(cn => {
@@ -120,20 +144,14 @@ function parseLineItems(lineItems, data) {
     }
     if (!colour) colour = parts[0] || 'Unknown';
 
-    // Extract design from product title
     const design = title
       .replace(/^Cosmo /i, '')
-      .replace(/ Polo Shirt$/i, '')
-      .replace(/ Polo$/i, '')
-      .replace(/ Hoodie$/i, '')
-      .replace(/ Crew Neck$/i, '')
-      .replace(/ Drop Shoulder$/i, '')
-      .replace(/ Sweat ?[Ss]hirt$/i, '')
-      .replace(/ Drifit$/i, '')
-      .replace(/ \|.*$/i, '')
+      .replace(/ Polo Shirt$/i, '').replace(/ Polo$/i, '')
+      .replace(/ Hoodie$/i, '').replace(/ Crew Neck$/i, '')
+      .replace(/ Drop Shoulder$/i, '').replace(/ Sweat ?[Ss]hirt$/i, '')
+      .replace(/ Drifit$/i, '').replace(/ \|.*$/i, '')
       .trim() || 'Unknown';
 
-    // Detect category from product title
     const tl = title.toLowerCase();
     let category = 'Polos';
     if (tl.includes('hoodie')) category = 'Hoodies';
@@ -160,12 +178,12 @@ function fulfil(data, category, colour, design, size, qty) {
 }
 
 // ── Webhook ───────────────────────────────────────────────────
-app.post('/webhooks/orders/create', (req, res) => {
+app.post('/webhooks/orders/create', async (req, res) => {
   if (!verifyShopifyWebhook(req)) return res.status(401).send('Unauthorized');
   let order;
   try { order = JSON.parse(req.body.toString()); } catch { return res.status(400).send('Bad JSON'); }
 
-  const data = loadData();
+  const data = await loadData();
   const lineItems = parseLineItems(order.line_items || [], data);
   const failed = [];
 
@@ -185,64 +203,75 @@ app.post('/webhooks/orders/create', (req, res) => {
     if (!result.ok) failed.push(item);
   }
 
-  saveData(data);
+  // Keep only last 500 orders
+  if (data.orders.length > 500) data.orders = data.orders.slice(0, 500);
+
+  await saveData(data);
   console.log(`Shopify order #${order.order_number} processed. Failed: ${failed.length}`);
   res.status(200).json({ processed: lineItems.length, failed: failed.length });
 });
 
 // ── REST API ──────────────────────────────────────────────────
-app.get('/api/inventory', (req, res) => res.json(loadData()));
+app.get('/api/inventory', async (req, res) => res.json(await loadData()));
 
-app.post('/api/orders', (req, res) => {
+app.post('/api/orders', async (req, res) => {
   const { orderId, customer, category, colour, design, size, qty } = req.body;
-  const data = loadData();
+  const data = await loadData();
   const result = fulfil(data, category, colour, design, size, qty);
   if (!result.ok) return res.status(400).json({ ok:false, message:`Insufficient stock. ${result.fromPrinted} printed + ${result.fromRaw} raw available.` });
   const src = result.fromPrinted>0 && result.fromRaw>0 ? 'Mixed' : result.fromPrinted>0 ? 'Printed' : 'Raw';
   data.orders.unshift({ type:'order', source:'manual', orderId, customer, category, colour, design, size, qty, src, status:'fulfilled', time:new Date().toISOString() });
-  saveData(data);
+  await saveData(data);
   res.json({ ok:true, src, fromPrinted:result.fromPrinted, fromRaw:result.fromRaw });
 });
 
-app.post('/api/returns', (req, res) => {
+app.post('/api/returns', async (req, res) => {
   const { orderId, customer, category, colour, design, size, qty, reason } = req.body;
-  const data = loadData();
+  const data = await loadData();
   const pk = `${category}||${colour}||${design}||${size}`;
   data.printed[pk] = (data.printed[pk] || 0) + qty;
   data.orders.unshift({ type:'return', source:'manual', orderId:orderId||'—', customer:customer||'—', category, colour, design, size, qty, src:`Return: ${reason||'unspecified'}`, status:'returned', time:new Date().toISOString() });
-  saveData(data);
+  await saveData(data);
   res.json({ ok:true });
 });
 
-app.patch('/api/raw/:category/:colour/:size', (req, res) => {
+app.patch('/api/raw/:category/:colour/:size', async (req, res) => {
   const { category, colour, size } = req.params;
   const { qty } = req.body;
-  const data = loadData();
+  const data = await loadData();
   if (!data.categories[category]?.[colour]) return res.status(404).json({ ok:false, message:'Not found' });
   data.categories[category][colour].stock[size] = Math.max(0, qty);
-  saveData(data);
+  await saveData(data);
   res.json({ ok:true });
 });
 
-app.post('/api/colours', (req, res) => {
+app.post('/api/colours', async (req, res) => {
   const { category, name, hex, stock } = req.body;
-  const data = loadData();
+  const data = await loadData();
   if (!data.categories[category]) return res.status(404).json({ ok:false, message:'Category not found' });
   if (data.categories[category][name]) return res.status(409).json({ ok:false, message:'Colour already exists' });
   data.categories[category][name] = { hex, designs:[], stock: stock||{S:0,M:0,L:0,XL:0,XXL:0} };
-  saveData(data);
+  await saveData(data);
   res.json({ ok:true });
 });
 
-app.delete('/api/colours/:category/:name', (req, res) => {
-  const data = loadData();
+app.delete('/api/colours/:category/:name', async (req, res) => {
+  const data = await loadData();
   const { category, name } = req.params;
   if (data.categories[category]) delete data.categories[category][name];
-  saveData(data);
+  await saveData(data);
   res.json({ ok:true });
 });
 
-app.listen(PORT, () => {
-  console.log(`Cosmo Attire inventory server on port ${PORT}`);
-  console.log(`Webhook: POST /webhooks/orders/create`);
-});
+// ── Start ─────────────────────────────────────────────────────
+initDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Cosmo Attire inventory server on port ${PORT}`);
+      console.log(`Database: connected`);
+    });
+  })
+  .catch(err => {
+    console.error('DB init failed:', err.message);
+    process.exit(1);
+  });
